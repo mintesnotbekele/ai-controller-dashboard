@@ -35,6 +35,17 @@ const AdminLayout = () => {
 
   },[])
 
+  const TimestampToDate = ({ timestamp }) => {
+    const convertTimestampToDate = (timestamp) => {
+      const timestampInSeconds = timestamp;
+      const timestampInMilliseconds = timestampInSeconds * 1000;
+      const date = new Date(timestampInMilliseconds);
+      return date.toUTCString(); // You can modify the formatting as needed
+    };
+  
+    return <span>{convertTimestampToDate(timestamp)}</span>;
+  };
+
   const columns = [
     columnHelper.accessor("name", {
       id: "name",
@@ -61,14 +72,14 @@ const AdminLayout = () => {
       id: "state",
       header: () => <Text fontWeight='bold'>state</Text>,
       cell: (info) => (
-        <Text >{info.getValue()} </Text>
+        <Text >{info.getValue() ?? 'NA'} </Text>
       ),
     }),
     columnHelper.accessor("last_contact", {
       id: "last_contact",
       header: () => <Text fontWeight='bold'>last_contact</Text>,
       cell: (info) => (
-        <Text >{info.getValue()} </Text>
+        <TimestampToDate timestamp={info.getValue()} /> 
       ),
     }),
     columnHelper.accessor("platform", {
@@ -95,7 +106,7 @@ const AdminLayout = () => {
         <Flex>
         <Sidebar />
         <Box flex="1" mt="50">
-          <Flex justify='center'><Text fontSize='25'>Turn The chatbot off or on for individual people</Text></Flex>
+          <Flex justify='center' my={5} bg='wheat'><Text fontSize='25'>Turn The chatbot off or on for individual people</Text></Flex>
         <Box m={5}>  <RenderTable columns={columns} data={data}/>
         </Box >
           <Flex justify="flex-end" p="4">
