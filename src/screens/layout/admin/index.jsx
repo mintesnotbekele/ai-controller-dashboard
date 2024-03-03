@@ -1,11 +1,13 @@
 import React from 'react';
 import { useEffect , useState} from 'react';
-import { ChakraProvider, Box, Flex, IconButton,Text, useColorMode, useColorModeValue, Switch, Badge } from '@chakra-ui/react';
+import { ChakraProvider, Box, Flex, IconButton,Text, useColorMode, useColorModeValue, Switch, Badge, Icon, VStack } from '@chakra-ui/react';
 import { FaSun, FaMoon, FaBars } from 'react-icons/fa';
 import Sidebar from '../../../components/sidebar';
 import axios from 'axios';
+import { MdPerson } from 'react-icons/md';
 import RenderTable from '../../rendertable';
 import { createColumnHelper } from "@tanstack/react-table";
+
 const columnHelper = createColumnHelper();
 const AdminLayout = () => {
     const { colorMode, toggleColorMode } = useColorMode();
@@ -28,13 +30,19 @@ const AdminLayout = () => {
         // Handle errors
       });
 
-
 }
   useEffect(()=>{
   getData();
 
   },[])
 
+  const TruncateText = ({ text, maxLength }) => {
+    if (text.length <= maxLength) {
+      return <span>{text}</span>;
+    } else {
+      return <span>{text.substring(0, maxLength)}...</span>;
+    }
+  };
   const TimestampToDate = ({ timestamp }) => {
     const convertTimestampToDate = (timestamp) => {
       const timestampInSeconds = timestamp;
@@ -49,9 +57,17 @@ const AdminLayout = () => {
   const columns = [
     columnHelper.accessor("name", {
       id: "name",
-      header: () => 'Name',
+      header: () => <VStack>
+        <Text>Name</Text>
+        <Text>Last Message</Text>
+      </VStack>,
       cell: (info) => (
-        <Text >{info.getValue()} </Text>
+      <Box><Flex>
+      <Icon as={MdPerson}/>
+        <Text >{info.getValue()} </Text></Flex>
+        <TruncateText text={info.row.original.last_message} maxLength={15} />
+        
+        </Box>
       ),
     }),
     columnHelper.accessor("email", {
