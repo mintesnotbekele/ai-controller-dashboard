@@ -15,6 +15,7 @@ import {
     Text,
     useColorModeValue,
   } from "@chakra-ui/react";
+  import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
   import { RiEyeCloseLine } from "react-icons/ri";
   import { MdOutlineRemoveRedEye } from "react-icons/md";
   import { useForm } from "react-hook-form";
@@ -69,6 +70,8 @@ const SignIn = () => {
         // Store cookieValue in localStorage or sessionStorage for subsequent requests
         localStorage.setItem('authCookie', "true");
         // Redirect to authenticated route or perform other actions upon successful login
+        window.location.reload();
+        return <Redirect to="/admin" />;
       } else {
        console.log('Login failed. Please check your credentials.');
       }
